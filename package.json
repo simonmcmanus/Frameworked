@@ -1,0 +1,14 @@
+{
+	"name": "frameworked",
+	"version": "0.1.0",
+	"description": "Bringing structure to your app since my flight to Australia",
+	"author": "Simon McManus  mcmanus.simon@gmail.com",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/simonmcmanus/framework.git"
+	},
+	"main": "app.js",
+	"dependencies": {
+		"sizlate": "0.5.0"
+	}
+}

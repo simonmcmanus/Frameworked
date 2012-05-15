@@ -6,7 +6,7 @@ REQUIREMENTS :
 compile modules and views from json.
 allow modules to be exposed over http at different levels of granularity
 provide an easy mechanism for auto updating and adding web sockets
-output valid html. 
+output valid html.
 
 
 ** REALTIME
@@ -47,24 +47,37 @@ var buildPageNow = function(page, options, callback) {
 		function getModuleHtml(error, _viewHtml) {
 			if(error) console.log('ERROR - There was a problem loading the html for the view. ', error);
 			viewHtml = _viewHtml;
-			var modules = spec.modules.concat(options.sharedModules); // include shared modules.
-			var c = modules.length;
+
+
+//			var modules = spec.modules.concat(options.sharedModules); // include shared modules.
+
 			var group = this.group();
-			while(c--) {
-				moduleMappings[moduleMappingCounter++] = modules[c]; // keep track of the requested order so that we can access the later in the group an know which module they are from.
-				var path = options.location + '/modules/' + modules[c] + '/' + modules[c] + '.html';
+			var modules = spec.modules;
+
+			for(var module in modules) {
+				//console.log(module, modules[module].module, modules[module].params);
+				moduleMappings[moduleMappingCounter++] = {
+					selector: module,
+					module:  modules[module].module,
+					params:  modules[module].params
+				}; // keep track of the requested order so that we can access the later in the group an know which module they are from.
+				var path = options.location + '/modules/' + modules[module].module + '/' + modules[module].module + '.html';
 				fs.readFile(path, 'utf8', group());
+
 			}
 		},
 		function getModulesData(error, _modulesHtml) {
 			if(error) console.log('ERROR - There was a problem loading the html for at least one of your modules. ', error);
 			var c = _modulesHtml.length;
 			while(c--) {
-				modulesHtml[moduleMappings[c]] = _modulesHtml[c]; // use name as id to store html for later use
-				if(exports.modules[moduleMappings[c]].getData) {
-					exports.modules[moduleMappings[c]].getData(this.parallel());
+				modulesHtml[moduleMappings[c].module] = _modulesHtml[c]; // use name as id to store html for later use
+/* exports.modules is not being set - */
+console.log(moduleMappings[c].module, exports.modules);
+				if(exports.modules[moduleMappings[c].module].getData) {
+
+					exports.modules[moduleMappings[c].module].getData(this.parallel());
 				} else {
-					viewSelectors[ '#' + moduleMappings[c] ] = _modulesHtml[c];
+					viewSelectors[ moduleMappings[c].selector ] = _modulesHtml[c];
 				}
 			}
 		},
@@ -72,6 +85,7 @@ var buildPageNow = function(page, options, callback) {
 			if(error) console.log('ERROR - There was a problem getting the selectors for at least one of your modules. ', error);
 			var selectors = [];
 			var modulesData = arguments;
+
 			var c = modulesData.length;
 			while(c--) {
 				if(modulesData[c]) {
@@ -117,16 +131,14 @@ var buildPageNow = function(page, options, callback) {
 exports.modules = {};
 var loadModules = function(options) {
 	for(var page in options.pageSpecs){
-		var c = options.pageSpecs[page].modules.length;
-		while(c--) {
-			var moduleName = options.pageSpecs[page].modules[c];
+		var modules = options.pageSpecs[page].modules;
+		for (var module in modules) {
+			var moduleName = modules[module].module;
 			var path = options.location + '/modules/' + moduleName + '/' + moduleName + '.app.js';
-			exports.modules[moduleName] = require(path);
+			exports.modules[moduleName] = require(path); //todo - need to pass in params here.
 		}
 	}
 };
-
-
 /*
 Expects:
 {	port: 802,
@@ -138,7 +150,9 @@ Expects:
 			modules: ['task', 'test']
 		}
 	}
-} */
+}
+*/
+
 exports.serve = function(options) {
 	loadModules(options);
 	var pages = options.pageSpecs;

@@ -4,12 +4,12 @@
 REQUIREMENTS : 
 
 compile modules and views from json.
-allow modules to be exposed over http at different levels of granularit
+allow modules to be exposed over http at different levels of granularity
 provide an easy mechanism for auto updating and adding web sockets
-output valid html. - (heading link tags).
+output valid html. 
 
 
-** REALTIME HACK
+** REALTIME
 == serve client side code to lsten for events
 == provide serverside code to fire events
 == provide clientside code to fire events,
@@ -51,7 +51,7 @@ var buildPageNow = function(page, options, callback) {
 			var c = modules.length;
 			var group = this.group();
 			while(c--) {
-				moduleMappings[moduleMappingCounter++] = modules[c]; // keep track of the requested order so that we can access the later in the group an know which module they are from. 
+				moduleMappings[moduleMappingCounter++] = modules[c]; // keep track of the requested order so that we can access the later in the group an know which module they are from.
 				var path = options.location + '/modules/' + modules[c] + '/' + modules[c] + '.html';
 				fs.readFile(path, 'utf8', group());
 			}
@@ -64,25 +64,25 @@ var buildPageNow = function(page, options, callback) {
 				if(exports.modules[moduleMappings[c]].getData) {
 					exports.modules[moduleMappings[c]].getData(this.parallel());
 				} else {
-					viewSelectors[ '#' + moduleMappings[c] ] = _modulesHtml[c];	
+					viewSelectors[ '#' + moduleMappings[c] ] = _modulesHtml[c];
 				}
 			}
 		},
 		function buildHtml(error) {
 			if(error) console.log('ERROR - There was a problem getting the selectors for at least one of your modules. ', error);
 			var selectors = [];
-	 		var modulesData = arguments;
+			var modulesData = arguments;
 			var c = modulesData.length;
 			while(c--) {
 				if(modulesData[c]) {
 					var moduleHtml = modulesHtml[modulesData[c].moduleName];
 					var moduleSelectors = modulesData[c].selectors;
-					var moduleHtml = sizlate.doRender(moduleHtml, moduleSelectors); // render module before attaching to the page
+					moduleHtml = sizlate.doRender(moduleHtml, moduleSelectors); // render module before attaching to the page
 					selectors['#' + modulesData[c].moduleName] = moduleHtml; // modules mappings is wrong here.
 				}
 			}
 			viewHtml = sizlate.doRender(viewHtml, selectors);
-			var container = (options.container) ? options.container : '#container'; 
+			var container = (options.container) ? options.container : '#container';
 			var pageSelectors = {};
 			pageSelectors[ container ] = viewHtml;
 			var pageHtml = sizlate.doRender(layoutHtml, pageSelectors);
@@ -95,7 +95,7 @@ var buildPageNow = function(page, options, callback) {
 			doc.innerHTML = pageHtml;
 			var linkTags = doc.getElementsByTagName('link');
 			var c = linkTags.length;
-			var head = 	doc.getElementsByTagName('head')[0];
+			var head = doc.getElementsByTagName('head')[0];
 			while(c--) {
 				var link = doc.createElement('link');
 				link.setAttribute('href', linkTags[c].href);
@@ -110,7 +110,7 @@ var buildPageNow = function(page, options, callback) {
 			*/
 			return '<!doctype html>' + doc.innerHTML;
 		},
-		callback 
+		callback
     );
 };
 
@@ -128,7 +128,7 @@ var loadModules = function(options) {
 
 
 /*
-Expects: 
+Expects:
 {	port: 802,
 	sharedModules: [],
 	location: __dirname,
@@ -147,12 +147,11 @@ exports.serve = function(options) {
 		app.get(page,  function(req, res) {
 			buildPageNow(page, options, function(error, pageHtml) {
 				res.send(pageHtml);
-			})
-	    });
+			});
+		});
 	}
-
 /*
-todo - this currrently exposes serverside logic. 
+todo - this currrently exposes serverside logic.
 */
 	app.get('/modules/:module/:file', function(req, res) {
 		res.download(options.location + '/modules/' +req.params.module + '/' + req.params.file);
@@ -161,7 +160,7 @@ todo - this currrently exposes serverside logic.
 		res.download(options.location + '/views/' +req.params.view + '/' + req.params.file);
 	});
 	app.listen(options.port);
-}
+};
 
 
 

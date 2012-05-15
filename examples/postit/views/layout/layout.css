@@ -12,42 +12,11 @@ body {
 }
 
 
-#container
-{
-}
-
-#container
-{
-	box-shadow: inset 0px 5px 10px 0.6px #ccc;
+#container {
+	box-shadow: inset 0 5px 10px 0.6px #ccc;
 	width: 100%;
 	padding:1.5em 0;
-
-
-	/*
-	,
-	*/
-
-
-
-	/*
-	background: 
-				-webkit-gradient(radial, 53% -5%, 360, 53% 1%, 10, from(transparent), to(red)),
-				-webkit-gradient(radial, 13%  -5%, 360, 13% 1%, 10, from(transparent), to(#fff)),
-				-webkit-gradient(radial, 83%  -5%, 360, 83% 1%, 10, from(transparent), to(#fff))
-	*/			
-
 }
-
-
-/*
-.frame {
-	border:20px;
-	-webkit-border-image: url(/public/frame/frame.png) 10% repeat;
-	-moz-border-image: url(/public/frame/frame.png) 10% repeat;
-	margin:3em 2em;	
-}
-
-*/
 
 
 
@@ -57,11 +26,10 @@ button,
 input[type="submit"] {
 	cursor:	hand;
 	border: 1px solid #fff;
-	box-shadow: 1px 0px 1px 0px #999;
+	box-shadow: 1px 0 1px 0px #999;
 	padding: 5px 15px 5px 20px;
 	margin: 10px 0 0 0;
 	font-size: 1em;
-	color: #616060;
 	-moz-border-radius: 0.4em;
 	border-radius: 3px;
 	text-shadow: #888 0.5px 0.5px 0.5px;
@@ -72,7 +40,6 @@ input[type="submit"] {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#8b8784, endColorstr=#4f4e4a);
 	/* For Internet Explorer 8 */
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#8b8784, endColorstr=#4f4e4a)";
-	border:1px solid #bbb;
 	color:#444;
 }
 
@@ -93,7 +60,7 @@ input[type="submit"]:hover{
 	color:#111;	
 }
 
-input, 
+input,
 textarea{
 	font-family: 'GothamBook';
 	width: 100%;
@@ -218,6 +185,7 @@ input[type="submit"] {
 
 .stickynote {
 	padding:50px;
+	display: block;
 	position:relative;
 	background-color:#fe6;
 	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#fe6), to(#f6ef97), color-stop(.6,#f5da41));
@@ -356,11 +324,7 @@ li.open div.desc {
 /* Tasks */
 
 
-div.tasks li.open {
-}
-
-
-html body #deleted  {
+html body #deleted {
 	background: rgba(70, 70, 70, 0.5);
 	margin:0 2em;
 	border:1px solid #222;
@@ -370,6 +334,16 @@ display:none;
 }
 #deleted  li .button {
 display:none;
+}
+
+.tasks {
+	width: 24%;
+	display: inline-block;
+	background: red;
+}
+
+.tasksHeading {
+	display: inline;
 }
 
 div.tasks li .close {
@@ -1177,3 +1151,8 @@ button.add {
 .hidden {
 	display:none;
 }
+
+
+
+/* dump */
+

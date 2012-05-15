@@ -135,7 +135,7 @@ var loadModules = function(options) {
 		for (var module in modules) {
 			var moduleName = modules[module].module;
 			var path = options.location + '/modules/' + moduleName + '/' + moduleName + '.app.js';
-			exports.modules[moduleName] = require(path); //todo - need to pass in params here.
+			exports.modules[moduleName] = require(path)('bob'); //todo - need to pass in params here.
 		}
 	}
 };

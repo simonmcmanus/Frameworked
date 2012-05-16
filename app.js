@@ -71,11 +71,9 @@ var buildPageNow = function(page, options, callback) {
 			var c = _modulesHtml.length;
 			while(c--) {
 				modulesHtml[moduleMappings[c].module] = _modulesHtml[c]; // use name as id to store html for later use
-/* exports.modules is not being set - */
-console.log(moduleMappings[c].module, exports.modules);
+				/* exports.modules is not being set - */
 				if(exports.modules[moduleMappings[c].module].getData) {
-
-					exports.modules[moduleMappings[c].module].getData(this.parallel());
+					exports.modules[moduleMappings[c].module].getData(this.parallel(), moduleMappings[c].params);
 				} else {
 					viewSelectors[ moduleMappings[c].selector ] = _modulesHtml[c];
 				}
@@ -85,14 +83,17 @@ console.log(moduleMappings[c].module, exports.modules);
 			if(error) console.log('ERROR - There was a problem getting the selectors for at least one of your modules. ', error);
 			var selectors = [];
 			var modulesData = arguments;
-
 			var c = modulesData.length;
 			while(c--) {
 				if(modulesData[c]) {
 					var moduleHtml = modulesHtml[modulesData[c].moduleName];
 					var moduleSelectors = modulesData[c].selectors;
 					moduleHtml = sizlate.doRender(moduleHtml, moduleSelectors); // render module before attaching to the page
-					selectors['#' + modulesData[c].moduleName] = moduleHtml; // modules mappings is wrong here.
+
+					/* we need access to the page specificatins selectors here */
+
+					selectors['#' + modulesData[c].moduleName ] = moduleHtml; // modules mappings is wrong here.
+					//console.log(selectors);
 				}
 			}
 			viewHtml = sizlate.doRender(viewHtml, selectors);
@@ -135,7 +136,7 @@ var loadModules = function(options) {
 		for (var module in modules) {
 			var moduleName = modules[module].module;
 			var path = options.location + '/modules/' + moduleName + '/' + moduleName + '.app.js';
-			exports.modules[moduleName] = require(path)('bob'); //todo - need to pass in params here.
+			exports.modules[moduleName] = new require(path); //todo - need to pass in params here.
 		}
 	}
 };
